@@ -1,8 +1,8 @@
-# Maintainer: Barnabé di Kartola <barnabedikartola@gmail.com>
+# Maintainer: Tales A. Mendonça <talesam@gmail.com>
 
-pkgname=biglinux-package-template
-pkgdesc="Package template for biglinux"
-# depends=('')
+pkgname=biglinux-docker-wordpress
+pkgdesc="Content Management System (CMS) that allows for easy creation and management of websites, blogs, and online stores."
+depends=('biglinux-docker-config')
 # makedepends=('')
 # conflicts=('')
 pkgver=$(date +%y.%m.%d)

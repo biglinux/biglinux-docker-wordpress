@@ -1,0 +1,61 @@
+version: "3.9"
+services:
+  db-wordpress:
+    image: mariadb:latest
+    container_name: db-wordpress
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: r00tb1gl1nux
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: b1gl1nux
+    volumes:
+      - ${HOME}/Docker/Wordpress/db:/var/lib/mysql
+    
+    # Network the container will be connected to.
+        networks:
+            big-net:
+
+  wp-big:
+    image: wordpress:latest
+    container_name: wp-big
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db-wordpress:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: b1gl1nux
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ${HOME}/Docker/Wordpress/html:/var/www/html
+    depends_on:
+      - db-wordpress
+        
+        # Ports that will be exposed by the container. Port 8182 on the host will be directed to port 80 on the container.
+        ports:
+            - "8083:80"
+        deploy:
+            resources:
+                limits:
+                    # Limits the CPU usage by the container to 1 cores.
+                    cpus: '1'
+                    # Limits the memory usage by the container to 1GB.
+                    memory: 1G
+        healthcheck:
+            # Checks the health of the container using curl to access port 8200.
+            test: ["CMD", "curl", "-f", "http://127.0.0.1:8200"]
+            # The interval between each health check.
+            interval: 30s
+            # The maximum amount of time a health check can take before it is considered a failure.
+            timeout: 10s
+            # The number of consecutive health check failures required for the container to be considered unhealthy.
+            retries: 6
+        # Network the container will be connected to.
+        networks:
+            big-net:
+
+# Defines the networks that will be created
+networks:
+    # Network name
+    big-net:
+        # Name assigned to the network
+        name: big-net
