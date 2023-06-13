@@ -12,7 +12,22 @@ services:
             MYSQL_PASSWORD: b1gl1nux
         volumes:
             - ${HOME}/Docker/Wordpress/db:/var/lib/mysql
-    
+        deploy:
+            resources:
+                limits:
+                    # Limits the CPU usage by the container to 1 cores.
+                    cpus: '1'
+                    # Limits the memory usage by the container to 1GB.
+                    memory: 1G
+        healthcheck:
+            # Checks the health of the container using curl to access port 3306.
+            test: ["CMD", "curl", "-f", "http://127.0.0.1:3306"]
+            # The interval between each health check.
+            interval: 30s
+            # The maximum amount of time a health check can take before it is considered a failure.
+            timeout: 10s
+            # The number of consecutive health check failures required for the container to be considered unhealthy.
+            retries: 6
     # Network the container will be connected to.
         networks:
             big-net:
@@ -42,8 +57,8 @@ services:
                     # Limits the memory usage by the container to 1GB.
                     memory: 1G
         healthcheck:
-            # Checks the health of the container using curl to access port 8200.
-            test: ["CMD", "curl", "-f", "http://127.0.0.1:8200"]
+            # Checks the health of the container using curl to access port 80.
+            test: ["CMD", "curl", "-f", "http://127.0.0.1:80"]
             # The interval between each health check.
             interval: 30s
             # The maximum amount of time a health check can take before it is considered a failure.
