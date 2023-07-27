@@ -30,7 +30,7 @@ services:
             retries: 6
     # Network the container will be connected to.
         networks:
-            big-net:
+            - wordpress-net
 
     wp-big:
         image: wordpress:latest
@@ -67,11 +67,11 @@ services:
             retries: 6
         # Network the container will be connected to.
         networks:
-            big-net:
+            - wordpress-net
 
 # Defines the networks that will be created
 networks:
     # Network name
-    big-net:
+    wordpress-net:
         # Name assigned to the network
-        name: big-net
+        name: wordpress-net
